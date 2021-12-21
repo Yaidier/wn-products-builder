@@ -14,3 +14,4 @@ jobs:
         server: ftp.wirenomads.com
         username: u496070130.yaidier
         password: ${{ secrets.ftp_password }}
+        server-dir: ./subfolder/
