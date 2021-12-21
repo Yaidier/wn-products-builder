@@ -72,7 +72,7 @@ class WnProductsBuilder {
 
     function setting_backup() {
 
-        if( !get_option('wn_pb_backup_already') ) {
+        if( !get_option('wn_pb_backup_21_12_21') ) {
 
             $general_options = ProductsBuilder::$general_options;
             $products = $general_options['products'];
@@ -85,7 +85,7 @@ class WnProductsBuilder {
 
             }
 
-            update_option('wn_pb_backup_already', 'true');
+            update_option('wn_pb_backup_21_12_21', 'true');
 
         }
     }
