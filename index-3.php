@@ -1,3 +1,3 @@
 <?php
 
-echo 'File overwrite example';
+echo 'File';
