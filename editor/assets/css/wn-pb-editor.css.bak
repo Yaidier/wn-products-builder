@@ -1,0 +1,46 @@
+
+/*Removing the left padding to the WP Admin bar*/
+#wpcontent {
+    padding-left: 0px;
+    margin-left: 0px;
+}
+
+#wpadminbar {
+    display: none;
+}
+
+html.wp-toolbar {
+    padding-top: 0px;
+}
+
+/*Override the app height in order to rest the 32px of the upper admin bar of wp*/
+.wn_pb_container, 
+.wn_pb_container > section {
+    height: calc(var(--app-height) );
+}
+
+#adminmenumain {
+    /* transform: translateX( -100px ); */
+    display: none;
+}
+
+#wpfooter {
+    display: none;
+}
+
+#wpbody-content {
+    padding-bottom: 0px;
+}
+
+@media (max-width: 960px) {
+    .auto-fold #wpcontent, 
+    .auto-fold #wpfooter {
+        margin-left: 0px;
+        padding-left: 0px;
+    }
+
+    #wpbody {
+        padding-top: 0px;
+    }
+}
+
