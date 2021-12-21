@@ -11,7 +11,7 @@ jobs:
     - name: 📂 Sync files
       uses: SamKirkland/FTP-Deploy-Action@4.2.0
       with:
-        server: ftp.wirenomads.com
-        username: u496070130.yaidier
+        server: 192.169.149.112
+        username: YP@quickwaterheaterrepair.com
         password: ${{ secrets.ftp_password }}
-        server-dir: ./subfolder/
+        server-dir: ./Quickwaterheaterrepair.com/wp-content/plugins/wn-products-builder/
