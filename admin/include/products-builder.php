@@ -53,8 +53,11 @@ class ProductsBuilder {
                     <td><?php echo esc_attr( '[wn-pb id="' . $product_id . '"]' ); ?></td>
 
                     <td>
-                        <button class="wn_pb_table_btn_edit"    action="edit_product"></button>
-                        <button class="wn_pb_table_btn_remove"  action="remove_product"></button>
+                        <button class="wn_pb_table_buttons wn_pb_table_btn_clone"   action="clone_product"  title="clone product" ></button>
+                        <button class="wn_pb_table_buttons wn_pb_table_btn_export"  action="export_product" title="export product" ></button>
+                        <button class="wn_pb_table_buttons wn_pb_table_btn_import"  action="import_product" title="import product" ></button>
+                        <button class="wn_pb_table_buttons wn_pb_table_btn_edit"    action="edit_product"   title="edit product" ></button>
+                        <button class="wn_pb_table_buttons wn_pb_table_btn_remove"  action="remove_product" title="remove product" ></button>
                     </td>
                 </tr>
 

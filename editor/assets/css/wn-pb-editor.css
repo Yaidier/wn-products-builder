@@ -431,7 +431,7 @@
     height: 21px;
     font-size: 12px;
     font-weight: 700;
-    background-color: var(--wn_pb_e_assent);
+    background-color: var(--wn_pb_e_assent) !important;
     border-radius: 4px;
     border: none;
     outline: none;
@@ -443,7 +443,7 @@
 }
 
 .wn_pb_editor .wn_pb_e_lpanel_relative > .wn_pb_e_lpanel_scwrapper > button:hover {
-    background-color: #77b954;
+    background-color: #77b954 !important;
     transition: 0.3s ease;
 }
 
@@ -797,6 +797,8 @@
 .wn_pb_editor .wn_pb_e_si_preview > img {
     width: 100%;
     display: block;
+    height: 140px;
+    object-fit: cover;
 }
 
 .wn_pb_editor .wn_pb_e_si_preview > span {

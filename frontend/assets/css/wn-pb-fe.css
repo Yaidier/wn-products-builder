@@ -42,7 +42,7 @@
 .wn_pb_wrapper {
   position: relative;
   overflow-y: scroll;
-  background-color: rgba(255, 255, 255, 0.397);
+  background-color: rgb(255, 255, 255);
 }
 
 .wn_pb_wrapper .wn_pb_container {
