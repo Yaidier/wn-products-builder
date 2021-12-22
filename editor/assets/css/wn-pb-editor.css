@@ -1319,10 +1319,6 @@
 	align-items: center;
 } 
 
-.wn_pb_e_select .wn_pb_e_select_index label {
-    /* margin-top: 0px; */
-}
-
 .wn_pb_e_select .wn_pb_e_select_index select {
 	width: 50%;
 	height: 34px;
