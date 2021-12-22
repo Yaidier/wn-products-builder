@@ -31,10 +31,6 @@
   box-shadow: 3px 8px 27px rgba(12, 29, 44, 0.2);
 }
 
-.wn_pb > h1 {
-  
-}
-
 .wn_pb_btn_sav_chg {
   margin-top: 30px;
   background-color: var(--wn_pb_e_primary);

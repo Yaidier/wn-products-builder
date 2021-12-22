@@ -1,1 +1,5 @@
-downloads/
+# exclude everything
+downloads/*
+
+# exception to the rule
+!downloads/.gitkeep 
