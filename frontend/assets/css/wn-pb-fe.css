@@ -8,6 +8,10 @@
   --wn_pb_04s_ease: 0.4s ease;
 }
 
+body {
+  background-color: #fff !important;
+}
+
 .wn_pb_wrapper h1,
 .wn_pb_wrapper h2,
 .wn_pb_wrapper h3,
@@ -321,7 +325,7 @@
   margin-right: 5px;
   margin-bottom: 5px;
   cursor: pointer;
-  background-color: #fff;
+  background-color: #fff !important;
   -webkit-transition: 0.3s ease;
   transition: 0.3s ease;
 }
@@ -335,7 +339,8 @@
 }
 
 .wn_pb_wrapper .wn_pb_selector_button:focus {
-  background-color: #fff;
+  background-color: #fff !important;
+  outline: none !important;
 }
 
 .wn_pb_wrapper .wn_pb_selector_button__active {
@@ -416,13 +421,17 @@
 }
 
 .wn_pb_wrapper .wn_pb_help_button {
-  background-color: #FCFDFE;
+  background-color: #FCFDFE !important;
   border: 1px solid #DBDBDC;
   border-radius: 5px;
   padding: 15px 35px;
-  color: var(--wn_pb_regular_t_color);
+  color: var(--wn_pb_regular_t_color) !important;
   font-size: 14px;
   font-weight: 400;
+}
+
+.wn_pb_wrapper .wn_pb_help_button:focus {
+  outline: none !important;
 }
 
 .wn_pb_wrapper .wn_pb_total_cost_wrapper {
@@ -744,7 +753,7 @@
   background-image: linear-gradient(to right, var(--wn_pb_primary_gradient_1), var(--wn_pb_primary_gradient_2));
   border: none;
   height: 32px;
-  color: #fff;
+  color: #fff !important;
   width: 100%;
   font-size: 14px;
   font-weight: 600;

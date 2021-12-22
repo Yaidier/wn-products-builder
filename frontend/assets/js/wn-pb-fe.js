@@ -24,10 +24,12 @@ class WnPbFrontEnd {
         this.previous_active_section = -1;
         this.resume_wrapper_height;
         this.is_safari = false;
+        this.safari_version = 0;
         this.total_value = 0;
         this.previous_total_value = 0;
         this.animate_numbers = true;
         this.editor_active = false;
+        this.first_run = true;
 
         //Initializing the script
         self.appHeight();
@@ -207,6 +209,12 @@ class WnPbFrontEnd {
         self.total_value = 0;
         $('.wn_pb_selector_button__active').each(function(){
 
+            if( self.first_run ) {
+
+                $(this).addClass('wn_pb_selector_button__default');
+
+            }
+
             const price_field = $(this).find('.wn_pb_selector_price').text();
             let value = parseInt(price_field);
 
@@ -216,6 +224,7 @@ class WnPbFrontEnd {
             
         });
 
+        self.first_run = false;
         self.update_total_value(self.total_value);
 
     }
@@ -249,8 +258,6 @@ class WnPbFrontEnd {
                     current_value += step;
                     $(element).text( current_value );
                 }
-
-            
                 
             }, 40);
 
@@ -275,9 +282,7 @@ class WnPbFrontEnd {
                 }
 
             }, 40);
-
         }
-
     }
 
     static update_total_value(total_value) {
@@ -308,11 +313,9 @@ class WnPbFrontEnd {
         }
 
         // Removing scroll-snap-align property to get a smooth transition
-        if ( !self.is_safari ) {
+        if ( !self.is_safari || ( self.is_safari && self.safari_version >= 15 ) ) {
             $('.wn_pb_container > section').css('scroll-snap-align', 'unset');
         }
-
-        // $('.wn_pb_container > section').css('scroll-snap-align', 'unset');
         
         // const current_section_index = $(current_section).attr('index');
         const offset = self.sections_height * section_index;
@@ -335,19 +338,14 @@ class WnPbFrontEnd {
             function() {
 
                 //Restoring scroll-snap-align property
-                if( !self.is_safari ) {
-
+                if ( !self.is_safari || ( self.is_safari && self.safari_version >= 15 ) ) {
                     $('.wn_pb_container > section').css('scroll-snap-align', 'start');
-
                 }
-
-                // $('.wn_pb_container > section').css('scroll-snap-align', 'start');
 
                 //Restoring the scroll event if it was uninded previously
                 self.register_scroll_event();
 
             } 
-            
         );
     }
     
@@ -359,17 +357,13 @@ class WnPbFrontEnd {
         //Getting the sections height + the top and bottom padding (60px and 90px)
         const one_section = $('.wn_pb_container > section')[0];
 
-        var padding_top = $(one_section).css('padding-top');
-        padding_top = parseInt( padding_top );
+        let padding_top = $(one_section).css('padding-top');
+        let padding_bottom = $(one_section).css('padding-bottom');
 
-        var padding_bottom = $(one_section).css('padding-bottom');
+        padding_top = parseInt( padding_top );
         padding_bottom = parseInt( padding_bottom );
 
         self.sections_height = $(one_section).height() + padding_bottom + padding_top;
-
-        console.log('sections height', self.sections_height);
-
-        let full_height = ($('.wn_pb_container > section').length * self.sections_height) - self.sections_height;
 
     }
 
@@ -405,15 +399,10 @@ class WnPbFrontEnd {
 
         $(window).resize(function(){
 
-            console.log('window resize');
-
             self.get_sections_height();
-
             self.window_width = $(window).width();
-
             self.adjust_index_element_height();
             self.modify_resume_section();
-            // split_resume_on_mobile();
     
         });
     }
@@ -430,13 +419,10 @@ class WnPbFrontEnd {
             }
     
             e.preventDefault();    
-
             const edit_index = $(this).attr('index');
-    
             self.move_to_specific_section( edit_index );
     
         });
-
     }
 
     static register_buttons_events () {
@@ -464,7 +450,6 @@ class WnPbFrontEnd {
             self.recalculate();       
     
         });  
-
     }
 
     static register_index_links_event() {
@@ -489,7 +474,6 @@ class WnPbFrontEnd {
             self.move_to_specific_section( edit_index );
     
         });
-
     }
 
     static register_scroll_event() {
@@ -514,15 +498,6 @@ class WnPbFrontEnd {
             }
             self.lastScrollTop = scroll;
 
-            // console.log('Number of Sections:', self.number_of_sections);
-
-            //Prevent Active Section to be the last (Resume Extension) on Desktop view
-            // if( self.window_width > 600 && ( self.active_section == ( self.number_of_sections - 1 ) ) ) {
-            //     return;
-            // }
-        
-            console.log('Active Section: ', + self.active_section);
-
             if (self.active_section != self.previous_active_section) {
 
                 self.adjust_index_element_height();
@@ -534,8 +509,6 @@ class WnPbFrontEnd {
             self.previous_active_section = self.active_section;
 
         });
-
-
     }
 
     static adjust_index_element_height() {
@@ -552,13 +525,10 @@ class WnPbFrontEnd {
         }
 
         const current_section = $('.wn_pb_container > section')[self.active_section];
-
         const section_content_height = $(current_section).children('.wn_pb_section_content').height();
-
         var value = (section_content_height/2);
 
         value += 31; //Difference between header and footer height
-
         value -= 75; //Manual Offset
 
         $('.wn_pb_section_index').css('top',  'calc( 50% - ' + value + 'px )');
@@ -571,11 +541,11 @@ class WnPbFrontEnd {
         let self = this;
 
         // Get the modal
-        var modal = document.getElementById("myModal");
+        let modal = document.getElementById("myModal");
 
         // Get the <span> element that closes the modal
         // var span = $('.close');
-        var span = document.getElementsByClassName("close")[0];
+        let span = document.getElementsByClassName("close")[0];
 
         // When the user clicks on <span> (x), close the modal
         span.onclick = function() {
@@ -592,7 +562,6 @@ class WnPbFrontEnd {
                 self.exit_the_modal(modal);
 
             }
-
         }
     }
 
@@ -626,10 +595,10 @@ class WnPbFrontEnd {
             }
 
             // Get the modal
-            var modal = document.getElementById("myModal");
+            let modal = document.getElementById("myModal");
 
             //Getting the modal content
-            var modal_body = $('.modal-body');
+            let modal_body = $('.modal-body');
             const content_to_send = $(this).parent().children('.wn_pb_modal_content_to_send').html();
 
             //Cleaning the modal content
@@ -706,10 +675,6 @@ class WnPbFrontEnd {
 
                 const el_tag_name = $(this_column_children).get(0).tagName;
 
-                if ( !$(this_column_children).hasClass('wn_pb_resume_wrapper') ) {
-                    console.log('this is not the element in question');
-                }
-
                 if( el_tag_name != 'STYLE' && !$(this_column_children).hasClass('wn_pb_resume_wrapper') ) {
 
                     let sibling_height = 0;
@@ -737,9 +702,7 @@ class WnPbFrontEnd {
 
             $(this).css('max-height', available_height + 'px');
             
-
         });
-
     }
 
     static split_resume_on_mobile() {
@@ -747,12 +710,9 @@ class WnPbFrontEnd {
         let $ = this.$;
         let self = this;
 
-        // console.log('number of sections -> ', self.number_of_sections);
-
         if( self.window_width <= 600 ) {
 
             if( $('.wn_pb_resume_section').hasClass('wn_pb_set_inner_scroll') ) {
-                // console.log('si tiene la clase');
                 $('.wn_pb_resume_section .wn_pb_media_wrapper').css('height', '65%');
             }
 
@@ -767,8 +727,6 @@ class WnPbFrontEnd {
                 $('.wn_pb_resume_section--extension .wn_pb_media_wrapper').append(contact_form);
 
                 $('.wn_pb_schedule_redirect').css('display', 'inline');
-                
-                // console.log( 'just moved' );
 
                 //Displaying the section
                 $('.wn_pb_resume_section--extension').css('display', 'block');
@@ -792,17 +750,13 @@ class WnPbFrontEnd {
                 $('.wn_pb_resume_section .wn_pb_options').append(contact_form);
 
                 $('.wn_pb_schedule_redirect').css('display', 'none');
-                
-                // console.log( 'just moved back' );
 
                 //Hidding the section
                 $('.wn_pb_resume_section--extension').css('display', 'none');
                 $('.wn_pb_index_resume_ext').css('display', 'none');
 
             }
-
         }
-
     }
 
     static register_redirect_to_resume_ext() {
@@ -817,7 +771,6 @@ class WnPbFrontEnd {
             }
 
             var resume_ext_index_value = $('.wn_pb_resume_section--extension').attr('index');
-
             self.move_to_specific_section(resume_ext_index_value);
 
         })
@@ -836,18 +789,18 @@ class WnPbFrontEnd {
             }
 
             $('.wn_pb_selectors_wrapper').each(function(){
+                $(this).children('button').each( function(){
+                    $(this).removeClass('wn_pb_selector_button__active');
 
-                $(this).children('button').removeClass('wn_pb_selector_button__active');
-                $($(this).children('button')['0']).addClass('wn_pb_selector_button__active');
-    
+                    if( $(this).hasClass('wn_pb_selector_button__default') ) {
+                        $(this).addClass('wn_pb_selector_button__active');
+                    }
+                });
             });
 
             self.recalculate();
-            self.regenerate_resume_container( true );
-            
-            
+            self.regenerate_resume_container( true );            
         });
-
     }
 
     static register_dropdown_select_event() {
@@ -884,14 +837,12 @@ class WnPbFrontEnd {
         doc.style.setProperty('--app-height', `${window.innerHeight - y_offset }px`)
     }
 
-    static is_safari_version( user_agent ) {
+    static get_safari_version( user_agent ) {
 
-        let index_of = user_agent.indexOf('Version/');
-
+        let version = user_agent.substring( user_agent.indexOf( 'Version/' ) + 8, user_agent.indexOf( 'Version/' ) + 8 + 5 );
+        version     = parseInt( version.substring( 0,version.indexOf('.') ) );
         
-
-        let version;
-        return index_of;
+        return version;
 
     }
     
@@ -899,30 +850,13 @@ class WnPbFrontEnd {
 
         let $ = this.$;
         let self = this;
-        
-        console.log( 'detecting browser typee' );
-
-        console.log( navigator.userAgent );
 
         if (navigator.userAgent.search("Safari") >= 0 && navigator.userAgent.search("Chrome") < 0) {
 
-            let safari_version = self.is_safari_version( navigator.userAgent );
-
-            console.log( 'index of ', safari_version);
-            
+            self.safari_version = self.get_safari_version( navigator.userAgent );           
             self.is_safari = true;
 
-            console.log( 'Yeeeess!!! Is Safari :) ... Oh noouuu :(' );
-
-            console.log( navigator.userAgent );
-
         }
-        else {
-
-            console.log( 'It is not Safari' );
-
-        }
-
     }
 
     static register_submit_button_event() {
@@ -964,13 +898,10 @@ class WnPbFrontEnd {
 
             $('.wn_pb_contanct_form_wrapper form > div:nth-child(1)').append(text_area);
 
-
             $(this).off('click.submit');
             $(this).click();
 
-
         })
-
     }
 
     static register_move_to_next_section_btn() {
@@ -982,12 +913,10 @@ class WnPbFrontEnd {
 
             $(this).on('click', function(){
 
-                let current_section = parseInt($(this).closest('section').attr('index'));
-                
+                let current_section = parseInt($(this).closest('section').attr('index'));  
                 self.move_to_specific_section((current_section + 1));
 
             });
-
         });
     }
 
@@ -1017,11 +946,5 @@ class WnPbFrontEnd {
 jQuery(document).ready(function($){
 
     WnPbFrontEnd.instance().init($, 0);
-    
-    
-
-    // console.log('active section');
-    // console.log(WnPbFrontEnd.instance().active_section);
-    // console.log('active section');
 
 });
