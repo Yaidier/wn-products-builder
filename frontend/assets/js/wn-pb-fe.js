@@ -818,6 +818,8 @@ class WnPbFrontEnd {
     }
 
     static appHeight() {
+        console.log('exit the appHeight function');
+        return;
 
         let $ = this.$;
         let self = this;
