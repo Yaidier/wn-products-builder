@@ -29,7 +29,7 @@ class ProductsBuilder {
 
     }
 
-    public function render_products_table() {
+    static public function render_products_table() {
         
     ?>
     <table class="wn_pb_table">

@@ -7,7 +7,7 @@ Plugin Name: WN Products Builder
 Plugin URI: https://wirenomads.com
 Description: 
 Author: Yaidier Perez
-Version: 1.0 (Beta)
+Version: 1.0 
 Author URI: 
 License: GPLv2 or later
 */

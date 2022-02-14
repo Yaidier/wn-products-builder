@@ -327,21 +327,22 @@ jQuery(document).ready(function($){
         float_editor_animation_in();
         
 
-        let img_element = $(element).find('.wn_pb_video_img_preview');
-        let video_element = $(element).find('.wn_pb_video_src');
-        let text_element = $(element).find('.wn_pb_send_trigger_text');
+        let img_element     = $(element).find('.wn_pb_video_img_preview'),
+            video_element   = $(element).find('.wn_pb_video_src'),
+            text_element    = $(element).find('.wn_pb_send_trigger_text'),
+            img_src         = null;
 
-        const img_src = $(img_element).attr('src');
-        const video_src = $(video_element).attr('src');
-        const video_iframe_src = $(element).find('.wn_pb_video_element_iframe').attr('src');
-        const text_src = $(text_element).text();
+        if ( !$(img_element).attr('src') ) {
+            img_src = $(img_element).attr('default-preview-img');
+        }
+        else {
+            img_src = $(img_element).attr('src');
+        }
 
-        console.log('Video URL');
-
-      
-
-        console.log('iframe source:');
-        console.log(video_iframe_src);
+        
+        const video_src     = $(video_element).attr('src'),
+        video_iframe_src    = $(element).find('.wn_pb_video_element_iframe').attr('src'),
+        text_src            = $(text_element).text();
 
         $(widget_editor).find('.wn_pb_e_sv_img_p').attr('src', img_src);
         $(widget_editor).find('.wn_pb_e_sv_video_p').attr('src', video_src);
@@ -368,9 +369,8 @@ jQuery(document).ready(function($){
 
         $(widget_editor).find('.wn_pb_e_video_url_input').on('input', function(){
 
-            let value = $(this).val();
-
-            value = 'https://www.youtube.com/embed/' + value;
+            let value   = $(this).val();
+            value       = 'https://www.youtube.com/embed/' + value;
 
             $(element).find('.wn_pb_video_element[value="1"]').attr('src', value);
 
@@ -381,11 +381,8 @@ jQuery(document).ready(function($){
             if($(this).css('display') == 'block') {
 
                 const value = $(this).attr('value');
-
                 $(widget_editor).find('.wn_pb_e_select_index select').val(value);
-
                 let select =  $(widget_editor).find('.wn_pb_e_select_index select');
-
                 $(select).trigger('input');
 
             }

@@ -41,7 +41,7 @@ class WnSimpleVideoImgWidget extends WnWidgets {
             <span>Simple Video</span>
             <div class="wn_pb_e_widget_content">
                 <div class="wn_pb_video_content" widget-id="" widget-type="simple-video">
-                    <img class="wn_pb_video_img_preview" src="<?php echo WN_PB_URL . 'editor/assets/img/default-img.svg' ?>" alt="">
+                    <img class="wn_pb_video_img_preview" src="" default-preview-img="<?php echo WN_PB_URL . 'editor/assets/img/default-img.svg' ?>" alt="">
 
                     <div class="wn_pb_send_to_modal_wrapper wn_pb_send_to_modal_video_media">
                         <div id="modal_trigger" class="wn_pb_send_trigger">

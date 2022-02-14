@@ -313,9 +313,9 @@ class WnPbFrontEnd {
         }
 
         // Removing scroll-snap-align property to get a smooth transition
-        if ( !self.is_safari || ( self.is_safari && self.safari_version >= 15 ) ) {
-            $('.wn_pb_container > section').css('scroll-snap-align', 'unset');
-        }
+        // if ( !self.is_safari || ( self.is_safari && self.safari_version >= 15 ) ) {
+        //     $('.wn_pb_container > section').css('scroll-snap-align', 'unset');
+        // }
         
         // const current_section_index = $(current_section).attr('index');
         const offset = self.sections_height * section_index;
@@ -338,9 +338,9 @@ class WnPbFrontEnd {
             function() {
 
                 //Restoring scroll-snap-align property
-                if ( !self.is_safari || ( self.is_safari && self.safari_version >= 15 ) ) {
-                    $('.wn_pb_container > section').css('scroll-snap-align', 'start');
-                }
+                // if ( !self.is_safari || ( self.is_safari && self.safari_version >= 15 ) ) {
+                //     $('.wn_pb_container > section').css('scroll-snap-align', 'start');
+                // }
 
                 //Restoring the scroll event if it was uninded previously
                 self.register_scroll_event();
@@ -512,6 +512,7 @@ class WnPbFrontEnd {
     }
 
     static adjust_index_element_height() {
+        return;
 
         let $ = this.$;
         let self = this;
