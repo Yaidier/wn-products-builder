@@ -8,10 +8,6 @@
   --wn_pb_04s_ease: 0.4s ease;
 }
 
-body {
-  background-color: #fff !important;
-}
-
 .wn_pb_wrapper h1,
 .wn_pb_wrapper h2,
 .wn_pb_wrapper h3,
@@ -46,7 +42,7 @@ body {
 .wn_pb_wrapper {
   position: relative;
   overflow-y: scroll;
-  background-color: rgb(255, 255, 255);
+  background-color: rgba(255, 255, 255, 0.397);
 }
 
 .wn_pb_wrapper .wn_pb_container {
@@ -325,7 +321,7 @@ body {
   margin-right: 5px;
   margin-bottom: 5px;
   cursor: pointer;
-  background-color: #fff !important;
+  background-color: #fff;
   -webkit-transition: 0.3s ease;
   transition: 0.3s ease;
 }
@@ -339,8 +335,7 @@ body {
 }
 
 .wn_pb_wrapper .wn_pb_selector_button:focus {
-  background-color: #fff !important;
-  outline: none !important;
+  background-color: #fff;
 }
 
 .wn_pb_wrapper .wn_pb_selector_button__active {
@@ -421,17 +416,13 @@ body {
 }
 
 .wn_pb_wrapper .wn_pb_help_button {
-  background-color: #FCFDFE !important;
+  background-color: #FCFDFE;
   border: 1px solid #DBDBDC;
   border-radius: 5px;
   padding: 15px 35px;
-  color: var(--wn_pb_regular_t_color) !important;
+  color: var(--wn_pb_regular_t_color);
   font-size: 14px;
   font-weight: 400;
-}
-
-.wn_pb_wrapper .wn_pb_help_button:focus {
-  outline: none !important;
 }
 
 .wn_pb_wrapper .wn_pb_total_cost_wrapper {
@@ -753,7 +744,7 @@ body {
   background-image: linear-gradient(to right, var(--wn_pb_primary_gradient_1), var(--wn_pb_primary_gradient_2));
   border: none;
   height: 32px;
-  color: #fff !important;
+  color: #fff;
   width: 100%;
   font-size: 14px;
   font-weight: 600;

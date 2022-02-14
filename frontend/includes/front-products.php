@@ -333,7 +333,7 @@ class FrontProducts {
         $wrapping_buttons = false;
         for( $w_i = 0; $w_i < count($product_data['sections'][$i][$column . '_content'] ); $w_i++ ) {
 
-            if( !$is_editor ) {
+            if( !$is_editor && isset($product_data['sections'][$i][$column . '_content'][$w_i]['styles']) ) {
 
                 $widget_styles = $product_data['sections'][$i][$column . '_content'][$w_i]['styles'];
                 echo (stripslashes($widget_styles));
