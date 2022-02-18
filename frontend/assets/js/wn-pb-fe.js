@@ -69,6 +69,8 @@ class WnPbFrontEnd {
         //Slplit the resume secton into two on mobile view (<= 600px)
         // split_resume_on_mobile();
 
+        self.check_to_check_to_remove_scroll_snap_for_form_widget();
+
         window.addEventListener('resize', function(){
             self.appHeight();
         });
@@ -500,6 +502,7 @@ class WnPbFrontEnd {
 
             if (self.active_section != self.previous_active_section) {
 
+                self.check_to_check_to_remove_scroll_snap_for_form_widget();
                 self.adjust_index_element_height();
                 $('.wn_pb_section_index > ul > li').removeClass('wn_pb_index__active');
                 $('.wn_pb_section_index > ul > li[index="' + self.active_section + '"]').addClass('wn_pb_index__active');
@@ -940,6 +943,18 @@ class WnPbFrontEnd {
                 })
             });
         });
+    }
+
+    static check_to_check_to_remove_scroll_snap_for_form_widget() {
+        let $ = this.$;
+        let self = this;
+
+        if( !$('section[section-id=' + self.active_section + ']').length || $('section[section-id=' + self.active_section + ']').find( '.wn_pb_contanct_form_wrapper' ).length ) {
+            $('.wn_pb_container').css('scroll-snap-type', 'none');
+        }
+        else {
+            $('.wn_pb_container').css('scroll-snap-type', 'y mandatory');
+        }
     }
 }
 

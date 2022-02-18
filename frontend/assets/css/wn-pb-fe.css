@@ -535,6 +535,10 @@
   font-size: 16px;
 }
 
+.wn_pb_wrapper .wn_pb_contanct_form_wrapper {
+  padding-bottom: 40px;
+}
+
 .wn_pb_wrapper .wn_pb_contanct_form_wrapper > .wpcf7 form > p {
   margin: 10px 0px;
   width: calc(50% - 5px);
