@@ -950,7 +950,9 @@ class WnPbFrontEnd {
         let self = this;
 
         if( !$('section[section-id=' + self.active_section + ']').length || $('section[section-id=' + self.active_section + ']').find( '.wn_pb_contanct_form_wrapper' ).length ) {
-            $('.wn_pb_container').css('scroll-snap-type', 'none');
+            setTimeout(() => {
+                $('.wn_pb_container').css('scroll-snap-type', 'none');
+            }, 500);
         }
         else {
             $('.wn_pb_container').css('scroll-snap-type', 'y mandatory');
