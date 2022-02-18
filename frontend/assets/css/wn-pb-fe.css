@@ -4,7 +4,7 @@
   --wn_pb_regular_t_color: #929292;
   --wn_pb_primary_gradient_1: #f78d31;
   --wn_pb_primary_gradient_2: #f89d37;
-  /*Transitions*/
+  /*Transitions**/
   --wn_pb_04s_ease: 0.4s ease;
 }
 
@@ -528,6 +528,10 @@
 
 .wn_pb_wrapper .wn_selected_total .wn_pb_selected_option_total_price {
   font-size: 16px;
+}
+
+.wn_pb_wrapper .wn_pb_contanct_form_wrapper {
+  padding-bottom: 40px;
 }
 
 .wn_pb_wrapper .wn_pb_contanct_form_wrapper > .wpcf7 form > p {
