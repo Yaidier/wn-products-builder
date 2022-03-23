@@ -30,6 +30,11 @@ class WnPbFrontEnd {
         this.animate_numbers = true;
         this.editor_active = false;
         this.first_run = true;
+        this.mobile_snap_effect = this.get_snap_effect_mobile_status();
+        this.already_on_desktop_view = ( this.window_width > 600 ) ? true : false;
+
+        console.log( 'already_on_desktop_view' );
+        console.log( this.already_on_desktop_view );
 
         //Initializing the script
         self.appHeight();
@@ -69,7 +74,7 @@ class WnPbFrontEnd {
         //Slplit the resume secton into two on mobile view (<= 600px)
         // split_resume_on_mobile();
 
-        self.check_to_check_to_remove_scroll_snap_for_form_widget();
+        self.remove_scroll_snap_for_form_widget();
 
         window.addEventListener('resize', function(){
             self.appHeight();
@@ -77,8 +82,14 @@ class WnPbFrontEnd {
 
     }
 
-    static regenerate_resume_container( is_doing_reset = false ) {
+    static get_snap_effect_mobile_status() {
+        let $ = this.$;
+        let snap_effect_mobile_status = $( '.wn_pb_wrapper' ).attr( 'snap-effect-mobile' );
 
+        return snap_effect_mobile_status;
+    }
+
+    static regenerate_resume_container( is_doing_reset = false ) {
         let $ = this.$;
         let self = this;
 
@@ -405,8 +416,28 @@ class WnPbFrontEnd {
             self.window_width = $(window).width();
             self.adjust_index_element_height();
             self.modify_resume_section();
+
+            if( self.is_coming_from_mobile_view() ) {
+                console.log( 'is comming from mobile...' );
+                self.move_to_specific_section( 0 );
+            }
     
         });
+    }
+
+    static is_coming_from_mobile_view() {
+        if( this.window_width > 600 ) {
+            if( this.already_on_desktop_view === false ) {
+                this.already_on_desktop_view = true;
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
+        this.already_on_desktop_view = false;
+        return false;
     }
 
     static register_edit_links_events () {
@@ -502,7 +533,7 @@ class WnPbFrontEnd {
 
             if (self.active_section != self.previous_active_section) {
 
-                self.check_to_check_to_remove_scroll_snap_for_form_widget();
+                self.remove_scroll_snap_for_form_widget();
                 self.adjust_index_element_height();
                 $('.wn_pb_section_index > ul > li').removeClass('wn_pb_index__active');
                 $('.wn_pb_section_index > ul > li[index="' + self.active_section + '"]').addClass('wn_pb_index__active');
@@ -591,7 +622,7 @@ class WnPbFrontEnd {
         let $ = this.$;
         let self = this;
 
-        $('.wn_pb_send_trigger').on('click', function(){
+        $('.wn_pb_send_trigger, .wn_pb_video_send_to_modal_event').on('click', function(){
 
             if (self.editor_active) {
                 return;
@@ -602,7 +633,8 @@ class WnPbFrontEnd {
 
             //Getting the modal content
             let modal_body = $('.modal-body');
-            const content_to_send = $(this).parent().children('.wn_pb_modal_content_to_send').html();
+            // const content_to_send = $(this).parent().children('.wn_pb_modal_content_to_send').html();
+            const content_to_send = $(this).closest('.wn_pb_video_content').find('.wn_pb_modal_content_to_send').html();
 
             //Cleaning the modal content
             $(modal_body).empty();
@@ -945,9 +977,18 @@ class WnPbFrontEnd {
         });
     }
 
-    static check_to_check_to_remove_scroll_snap_for_form_widget() {
+    static remove_scroll_snap_for_form_widget() {
         let $ = this.$;
         let self = this;
+
+        // console.log(this.mobile_snap_effect);
+        // console.log(this.window_width);
+
+        if( this.mobile_snap_effect == 'none' && this.window_width <= 600 ) {
+            // console.log( 'returning' );
+            $('.wn_pb_container').css('scroll-snap-type', 'none');
+            return;
+        }
 
         if( !$('section[section-id=' + self.active_section + ']').length || $('section[section-id=' + self.active_section + ']').find( '.wn_pb_contanct_form_wrapper' ).length ) {
             setTimeout(() => {
@@ -955,7 +996,9 @@ class WnPbFrontEnd {
             }, 500);
         }
         else {
+            // console.log( 'applying snpa effect again...' );
             $('.wn_pb_container').css('scroll-snap-type', 'y mandatory');
+
         }
     }
 }

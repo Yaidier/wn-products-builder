@@ -11,7 +11,6 @@ class WnSimpleVideoImgWidget extends WnWidgets {
     }
 
     public static function generate_html_controls() {
-
         self::$styles = [
             'simple_video_margin' => [
                 'type'   => 'dimensions',
@@ -25,10 +24,36 @@ class WnSimpleVideoImgWidget extends WnWidgets {
                         'margin-left'   => '0px',
                     ]
                 ]
-            ]
+            ],
+            'simple_video_hide_label' => [
+                'type'   => 'checkbox',
+                'label'  => 'Hide Label',
+                'target' => [
+                    'selectors' => '.wn_pb_send_trigger',
+                    'property'  => 'display',
+                    'status' => [
+                        '0' => 'flex',
+                        '1' => 'none',
+                    ],
+                    'default' => false,
+                ]
+            ],
+            'simple_video_hide_overlay_icon' => [
+                'type'   => 'checkbox',
+                'label'  => 'Hide Overlay Icon',
+                'target' => [
+                    'selectors' => '.wn_pb_play_video_overlay_icon',
+                    'property'  => 'display',
+                    'status' => [
+                        '0' => 'block',
+                        '1' => 'none',
+                    ],
+                    'default' => false,
+                ]
+            ],
         ];
 
-        return Controls::return_html_controls(self::$styles);
+        return Controls::return_html_controls( self::$styles );
 
     }
 
@@ -41,6 +66,7 @@ class WnSimpleVideoImgWidget extends WnWidgets {
             <span>Simple Video</span>
             <div class="wn_pb_e_widget_content">
                 <div class="wn_pb_video_content" widget-id="" widget-type="simple-video">
+                    <i class="wn_pb_play_video_overlay_icon wn_pb_video_send_to_modal_event"></i>
                     <img class="wn_pb_video_img_preview" src="" default-preview-img="<?php echo WN_PB_URL . 'editor/assets/img/default-img.svg' ?>" alt="">
 
                     <div class="wn_pb_send_to_modal_wrapper wn_pb_send_to_modal_video_media">

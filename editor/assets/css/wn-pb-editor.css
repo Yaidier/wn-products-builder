@@ -46,12 +46,12 @@
 }
 
 .wn_pb_editor .wne_text {
-    position: relative;
-    cursor: pointer;
+    /* position: relative;
+    cursor: pointer; */
 }
 
 .wn_pb_editor .wne_text::before {
-    content: "";
+    /* content: "";
     position: absolute;
     border: 1px solid #1d1f2c;
     width: calc(100% + 10px);
@@ -64,11 +64,11 @@
     visibility: hidden;
     transition: 0.2s ease;
     z-index: 10;
-    pointer-events: none;
+    pointer-events: none; */
 }
 
 .wn_pb_editor .wne_text::after {
-    content: "Edit";
+    /* content: "Edit";
     position: absolute;
     text-align: center;
     line-height: 15px;
@@ -83,20 +83,20 @@
     opacity: 0;
     visibility: hidden;
     transition: 0.2s ease;
-    z-index: 10;
+    z-index: 10; */
 }
 
 
 .wn_pb_editor .wne_text:hover::before {
-    opacity: 1;
+    /* opacity: 1;
     visibility: visible;
-    transition: 0.2s ease;
+    transition: 0.2s ease; */
 }
 
 .wn_pb_editor .wne_text:hover::after {
-    opacity: 1;
+    /* opacity: 1;
     visibility: visible;
-    transition: 0.2s ease;
+    transition: 0.2s ease; */
 }
 
 .wn_pb_editor .wn_pb_f_editor {
@@ -374,6 +374,7 @@
     left: 0px;
     transform: translateX(-100%);
     transition: 0.4s ease;
+    z-index: 100;
 }
 
 .wn_pb_editor .wn_pb_e_lpanel:hover {
@@ -506,10 +507,10 @@
 
 .wn_pb_editor .wn_pb_e_textarea_input {
 	width: 100%;
+    max-width: 100%;
 	color: rgb(255, 255, 255);
 	background-color: var(--wn_pb_e_sec_darker);
 	border-radius: 5px;
-	min-width: 370px;
     min-height: 100px;
     border: 2px solid var(--wn_pb_e_sec_lighter);
     padding: 10px;

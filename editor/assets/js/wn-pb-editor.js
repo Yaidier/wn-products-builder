@@ -553,7 +553,6 @@ jQuery(document).ready(function($){
 
         //Registering Delete Button Event
         $(widget_editor).find('.en_pb_e_remove_element').on('click', function() {
-
             $(element).remove();
             float_editor_animation_out();
 
@@ -951,13 +950,14 @@ jQuery(document).ready(function($){
     function alert_notification( message ) {
 
         $('.wn_pb_not_content p').text( message );
-        $('.wn_pb_not').addClass('wn_pb_not--active');
 
         setTimeout(() => {
+            $('.wn_pb_not').addClass('wn_pb_not--active');
+        }, 1000);
 
-            $('.wn_pb_not').removeClass('wn_pb_not--active');
-            
-        }, 2500);
+        setTimeout(() => {
+            $('.wn_pb_not').removeClass('wn_pb_not--active'); 
+        }, 3500);
 
     }
 
@@ -1227,7 +1227,24 @@ jQuery(document).ready(function($){
             data['cube_id'] =  $(element).attr('cube-id');
             data['content'] = cf7_shortcode;
 
-            data['styles'] = StylesConstructor.instance().get_html_styles(data['cube_id']);
+            // data['styles'] = StylesConstructor.instance().get_html_styles(data['cube_id']);
+
+            let all_styles_selectors_for_given_cube_id = StylesConstructor.instance().get_all_cube_styles_id(data['cube_id']);
+            data['styles'] = [];
+
+            console.log('all_styles_selectors_for_given_cube_id');
+            console.log(all_styles_selectors_for_given_cube_id);
+    
+            if( all_styles_selectors_for_given_cube_id != null ) {
+                $.each( all_styles_selectors_for_given_cube_id, function( index, cube_id  ) {
+                    let cube_id_splitted_array = split_the_cube_id( cube_id ),
+                        just_cube_id            = cube_id_splitted_array.cube_id,
+                        just_subtarget          = cube_id_splitted_array.subtarget;
+    
+                    data['styles'].push( StylesConstructor.instance().get_html_styles(just_cube_id, just_subtarget) );
+    
+                } );
+            }
 
             let styles_array = StylesConstructor.instance().get_styles_object(data['cube_id']);
 
@@ -1252,7 +1269,31 @@ jQuery(document).ready(function($){
             data = collect_html_data(element, widget_type);
         }
 
+        console.log('before returning Data');
+        console.log(data);
         return data;
+    }
+
+    function split_the_cube_id( cube_id ) {
+        let subtarget = null;
+            
+        console.log('cubeid');
+        console.log(cube_id);
+
+        if( cube_id.includes('.') ){
+            console.log('it includes a DOT ');
+            subtarget   = cube_id.substring( cube_id.indexOf('.') );
+        }
+
+        if( cube_id.includes('#') ){
+            subtarget   = cube_id.substring( cube_id.indexOf('#') );
+        }
+
+        if( subtarget != null ) {
+            cube_id     = cube_id.replace( subtarget, '' );
+        }
+
+        return { 'cube_id': cube_id, 'subtarget': subtarget };
     }
 
     function collect_html_data(element, type) {
@@ -1265,25 +1306,87 @@ jQuery(document).ready(function($){
 
         data['type'] = type;
         data['cube_id'] =  $(element).attr('cube-id');
-        data['styles'] = StylesConstructor.instance().get_html_styles(data['cube_id']);
 
-        let styles_array = StylesConstructor.instance().get_styles_object(data['cube_id']);
 
-        if( styles_array !== undefined ) {
+    
 
-            let output = {
-                desktop: {},
-                tablet: {},
-                mobile: {},
-            };
+        let all_styles_selectors_for_given_cube_id = StylesConstructor.instance().get_all_cube_styles_id(data['cube_id']);
+        data['styles'] = [];
+        data['object_styles'] = {};
 
-            Object.assign(output.desktop, styles_array['desktop']);
-            Object.assign(output.tablet, styles_array['tablet']);
-            Object.assign(output.mobile, styles_array['mobile']);
+        console.log('all_styles_selectors_for_given_cube_id');
+        console.log(all_styles_selectors_for_given_cube_id);
 
-            data['object_styles'] = output;
+        if( all_styles_selectors_for_given_cube_id != null ) {
+            $.each( all_styles_selectors_for_given_cube_id, function( index, cube_id  ) {
+                let cube_id_splitted_array  = split_the_cube_id( cube_id ),
+                    just_cube_id            = cube_id_splitted_array.cube_id,
+                    just_subtarget          = cube_id_splitted_array.subtarget,
+                    styles_array            = undefined;
 
+                console.log('Cube id');
+
+                console.log(cube_id);
+
+                console.log('Just Cube Id');
+                console.log(just_cube_id);
+                console.log('Subtarget');
+                console.log(just_subtarget);
+                
+                data['styles'].push( StylesConstructor.instance().get_html_styles(just_cube_id, just_subtarget) );
+
+                styles_array = StylesConstructor.instance().get_styles_object( cube_id );
+
+                if( styles_array !== undefined ) {
+
+                    let output = {
+                        desktop: {},
+                        tablet: {},
+                        mobile: {},
+                    };
+        
+                    Object.assign(output.desktop, styles_array['desktop']);
+                    Object.assign(output.tablet, styles_array['tablet']);
+                    Object.assign(output.mobile, styles_array['mobile']);
+
+                    console.log( 'cube id' );
+                    console.log( cube_id );
+                    // console.log( 'output' );
+                    // console.log( output );
+                    // console.log( 'object_style' );
+                    // console.log( data['object_styles'] );
+        
+                    data['object_styles'][cube_id] =  output ;
+                }
+
+            } );
         }
+
+        console.log( 'the styles object' );
+        console.log( data['object_styles'] );
+
+        console.log('The DAta STyles');
+        console.log(data['styles']);
+
+        // data['styles'] = StylesConstructor.instance().get_html_styles(data['cube_id']);
+
+        // let styles_array = StylesConstructor.instance().get_styles_object(data['cube_id']);
+
+        // if( styles_array !== undefined ) {
+
+        //     let output = {
+        //         desktop: {},
+        //         tablet: {},
+        //         mobile: {},
+        //     };
+
+        //     Object.assign(output.desktop, styles_array['desktop']);
+        //     Object.assign(output.tablet, styles_array['tablet']);
+        //     Object.assign(output.mobile, styles_array['mobile']);
+
+        //     data['object_styles'] = output;
+
+        // }
 
         return data;
 
@@ -1550,18 +1653,16 @@ jQuery(document).ready(function($){
 
         $(widget_editor).find('.wn_cb_controls').each(function(){
 
-
-
             if( $(this).hasClass('wn_cb_dimensions') ) {
-
                 controls.push( new DimensionsControl( $(this), cube_id ) );
-
             }
 
             if( $(this).hasClass('wn_cb_controls_range_slider') ) {
-
                 controls.push( new SilderRangeControl( $(this), cube_id ) );
-                
+            }
+
+            if( $(this).hasClass('wn_cb_controls_cehckbox') ) {
+                controls.push( new CheckboxControl( $(this), cube_id ) );
             }
 
         });
@@ -1767,6 +1868,19 @@ jQuery(document).ready(function($){
 
     }
 
+    function updating_to_version_2_0() {
+
+        let all_options_descriptions = $('.wn_pb_wrapper').find('.wm_pb_options_description');
+
+        all_options_descriptions.each( function( i, description_widget ) {
+            
+            if( description_widget.textContent == ''  ) {
+                console.log( description_widget );
+                $(description_widget).parent().remove();
+            }
+        });
+    }
+
     StylesConstructor.instance().update_object_style();
 
     register_all_editors();
@@ -1781,8 +1895,7 @@ jQuery(document).ready(function($){
     register_draggable_index();
 
     updating_to_version_1_0();
-
-    // StylesConstructor.instance().update_object_style();
+    updating_to_version_2_0();
     StylesConstructor.instance().render_all_styles();
 
 
@@ -1801,9 +1914,20 @@ class StylesConstructor {
         return StylesConstructor.instance_obj;
     }
 
+    static get_all_styles() {
+        return this.styles;
+    }
+
     static update_object_style() {
+        let self = this;
+
+        console.log( 'UPDATING THE OBJECT STYLES' );
 
         let products_sections = product_data_1['sections'];
+
+        console.log( products_sections );
+
+
 
         for (let section_index in products_sections) {
 
@@ -1825,25 +1949,61 @@ class StylesConstructor {
                                 continue;
                             }
 
+
                             const widget_id = widget['cube_id'];
                             const object_styles = widget['object_styles'];
 
-                            let array_styles = [];
-                            array_styles['desktop'] = [];
-                            array_styles['tablet'] = [];
-                            array_styles['mobile'] = [];
-                            
-                            for (let property in object_styles['desktop']) {
-                                array_styles['desktop'][property] = object_styles['desktop'][property];
-                            }
-                            for (let property in object_styles['tablet']) {
-                                array_styles['tablet'][property] = object_styles['tablet'][property];
-                            }
-                            for (let property in object_styles['mobile']) {
-                                array_styles['mobile'][property] = object_styles['mobile'][property];
-                            }
 
-                            this.set_styles_object(widget_id, array_styles);
+                            console.log( widget_id );
+                            console.log( object_styles );
+
+                            if( typeof object_styles['desktop'] === 'undefined' ) {
+                                console.log('DESKTOP UNDEFINED');
+                                jQuery.each( object_styles, function(subtarget, properties){
+                                    let array_styles = [];
+                                    array_styles['desktop'] = [];
+                                    array_styles['tablet'] = [];
+                                    array_styles['mobile'] = [];
+                                    
+                                    for (let property in properties['desktop']) {
+                                        array_styles['desktop'][property] = properties['desktop'][property];
+                                    }
+                                    for (let property in properties['tablet']) {
+                                        array_styles['tablet'][property] = properties['tablet'][property];
+                                    }
+                                    for (let property in properties['mobile']) {
+                                        array_styles['mobile'][property] = properties['mobile'][property];
+                                    }
+
+                                    console.log(subtarget);
+                                    console.log(array_styles);
+        
+                                    self.set_styles_object(subtarget, array_styles);
+                                });
+                            }
+                            else {
+                                console.log('DESKTOP DEFINED');
+
+                                let array_styles = [];
+                                array_styles['desktop'] = [];
+                                array_styles['tablet'] = [];
+                                array_styles['mobile'] = [];
+                                
+                                for (let property in object_styles['desktop']) {
+                                    array_styles['desktop'][property] = object_styles['desktop'][property];
+                                }
+                                for (let property in object_styles['tablet']) {
+                                    array_styles['tablet'][property] = object_styles['tablet'][property];
+                                }
+                                for (let property in object_styles['mobile']) {
+                                    array_styles['mobile'][property] = object_styles['mobile'][property];
+                                }
+
+                                console.log(widget_id);
+                                console.log(array_styles);
+    
+                                self.set_styles_object(widget_id, array_styles);
+                            }
 
                         }
                     }
@@ -1852,29 +2012,55 @@ class StylesConstructor {
         }
     }
 
-    static add_style(cube_id, properties, media = null) {
+    static add_style(target, properties, media = false) {
+        console.log( 'este es el target: ' );
 
-        console.log('Adding Styles');
+        console.log( target );
+
+        let self                    = this,
+            properties_and_values   = [],
+            devices                 = ['desktop', 'tablet', 'mobile'],
+            subtarget               = null,
+            cube_id                 = null;
+
+        if( typeof(target) === 'object' ) {
+            subtarget   = target.subtarget;
+            cube_id     = target.cube_id + subtarget;
+        }
+        else {
+            cube_id = target;
+        }
 
         if( !this.styles[cube_id] ) {
 
-            let properties_and_values = [];
-            
-            properties_and_values['desktop'] = [];
-            properties_and_values['tablet'] = [];
-            properties_and_values['mobile'] = [];
+            console.log( 'no existe asi que tenemos que crearlo' );
+
+            properties_and_values['desktop']    = [];
+            properties_and_values['tablet']     = [];
+            properties_and_values['mobile']     = [];
 
             this.styles[cube_id] = properties_and_values;
-        
         }
 
-        for (let key in properties) {
-            let value = properties[key];
-            
-            this.styles[cube_id][media][key] = value;
-            
-        }
+        console.log('si existe? Mhhhh show it to me');
 
+        console.log( cube_id );
+        console.log( this.styles[cube_id] );
+
+        if( !media ) {
+            jQuery.each(devices, function( index, device ) {
+                for (let key in properties) {
+                    self.styles[cube_id][device][key] = properties[key];
+
+                }
+            });
+        }
+        else {
+            for (let key in properties) {
+                self.styles[cube_id][media][key] = properties[key];
+
+            }
+        }
     }
 
     static remove_style(cube_id, properties, media = null) {
@@ -1911,13 +2097,53 @@ class StylesConstructor {
 
     }
 
-    static get_html_styles(cube_id) {
+    static get_all_cube_styles_id( cube_id ) {
+        console.log('get_all_cube_styles_id');
+        console.log( cube_id );
+        let all_given_styles_id = [];
 
-        let styles_object = this.styles[cube_id];
+        console.log( this.styles );
+        
+        for( let style in this.styles) {
+            console.log( 'the style' );
+            console.log( style );
+            if( style.includes( cube_id ) ) {
+                console.log('it does exists');
+                all_given_styles_id.push( style );
+            }
+        }
+
+        console.log(all_given_styles_id);
+
+        return all_given_styles_id;
+    }
+
+    static get_html_styles(cube_id, subtarget = null) {
+
+        console.log('the cube id: ');
+        console.log(cube_id);
+
+        if( !subtarget || subtarget === null ) {
+            subtarget = '';
+        }
+
+        let styles_selector = cube_id + subtarget;
+
+        console.log( styles_selector );
+
+        let styles_object   = this.styles[styles_selector];
+
+        console.log('Styles Object: ');
+        console.log(styles_object);
 
         if(styles_object == null) {
             return;
         }
+
+        console.log('Before the check: ');
+        console.log(styles_object);
+
+
 
         let html = '';
         let rules = {};
@@ -1942,23 +2168,38 @@ class StylesConstructor {
 
         });
 
-        css_selector = '[cube-id="' + cube_id + '"]';
+        css_selector = '[cube-id="' + cube_id + '"]' + ' ' + subtarget;
+
+
+        console.log('the cube element selector');
+        console.log('[cube-id="' + cube_id + '"]');
 
         //Adding specificity to the css selector
-        let cube_element = jQuery(css_selector);
+        let cube_element = jQuery('[cube-id="' + cube_id + '"]');
         let cube_element_ansestors = '';
         let ansestor = jQuery(cube_element).parent();
 
+        console.log('the cube element');
+        console.log(cube_element);
+
         for(let i = 0; i < 3; i++){
             if(!jQuery(ansestor).hasClass('wn_pb_e_widget_wrapper')) {
-                cube_element_ansestors = '.' + jQuery(ansestor).attr('class').split(' ')[0] + ' ' + cube_element_ansestors;
+                console.log('ansestor');
+                console.log( jQuery( ansestor ) );
+                let ancestor_classes_array = jQuery(ansestor).attr('class').split(' ');
+
+                if (ancestor_classes_array[0] !== undefined) {
+                    cube_element_ansestors = '.' +ancestor_classes_array[0] + ' ' + cube_element_ansestors;
+                }
+                
             }
+            
             ansestor = jQuery(ansestor).parent();
         }
 
         css_selector = cube_element_ansestors + ' ' + css_selector;
 
-        html = '<style cube-style-id="' + cube_id + '">';
+        html = '<style cube-style-id="' + styles_selector + '">';
         html += '@media only screen and (min-width: 851px){ ' + css_selector + '{' + rules['desktop'] + '} }';
         html += '@media only screen and (max-width: 850px) and (min-width: 601px){ ' + css_selector + ' { ' + rules['tablet'] + ' } }';
         html += '@media only screen and (max-width: 600px) and (min-width: 0px){ ' + css_selector + ' { ' + rules['mobile'] + ' } }';
@@ -1969,26 +2210,82 @@ class StylesConstructor {
     }
 
     static render_all_styles(){
-
+        console.log('!!!!!RENDER ALL STYLES!!!!!!!');
         //Getting all styles
-        let styles = this.styles;
+        let self            = this,
+            styles          = this.styles,
+            subtarget       = null,
+            style_selector  = null;
+
+        console.log(styles);
+
         Object.keys(styles).forEach(function(cube_id, index) {
 
-            StylesConstructor.render_styles(cube_id);
+            console.log( '!!!!STYLE!!!!' );
+
+            console.log( cube_id );
+
+            style_selector = self.split_the_cube_id(cube_id);
+
+            console.log(style_selector);
+
+            StylesConstructor.render_styles(style_selector);
 
         }, styles);
-
     }
 
-    static render_styles(cube_id) {
+    static split_the_cube_id( cube_id ) {
+        let subtarget = null;
+            
+        console.log('cubeid');
+        console.log(cube_id);
 
-        let current_style = jQuery('head').find('[cube-style-id="' + cube_id + '"]');
+        if( cube_id.includes('.') ){
+            console.log('it includes a DOT ');
+            subtarget   = cube_id.substring( cube_id.indexOf('.') );
+        }
+
+        if( cube_id.includes('#') ){
+            subtarget   = cube_id.substring( cube_id.indexOf('#') );
+        }
+
+        if( subtarget != null ) {
+            cube_id     = cube_id.replace( subtarget, '' );
+
+            return { 'cube_id': cube_id, 'subtarget': subtarget };
+        }
+
+        return cube_id;
+    }
+
+    static render_styles(target) {
+        console.log('render styles');
+        console.log(target);
+
+        let subtarget = null,
+            cube_id = null,
+            style_selector = target;
+
+        if( typeof(target) === 'object' ) {
+            subtarget   = target.subtarget;
+            cube_id     = target.cube_id;
+            style_selector = cube_id + subtarget;
+        }
+        else {
+            style_selector = target;
+            cube_id = target;
+        }
+
+        console.log(style_selector);
+
+
+        let current_style = jQuery('head').find('[cube-style-id="' + style_selector + '"]');
         let html;
         
         //Removing current styles
         jQuery(current_style).remove();
 
-        html = this.get_html_styles(cube_id);
+        html = this.get_html_styles(cube_id, subtarget);
 
         jQuery('head').append(html);
 
@@ -2202,6 +2499,88 @@ class Controls {
 
         });
 
+    }
+
+}
+
+class CheckboxControl extends Controls {
+    
+    constructor(control, cube_id) {
+        super(control, cube_id);
+
+        console.log('Checkbox Control');
+        console.log(control);
+        console.log(cube_id);
+
+        let data            = jQuery(control).data('params');
+
+        this.target             = data.control_properties.target.selectors;
+        this.status             = data.control_properties.target.status;
+        this.default_value      = data.control_properties.target.default;
+        this.property           = data.control_properties.target.property;
+
+        console.log( data );
+        console.log( this.target );
+        console.log( this.status );
+        console.log( this.default_value );
+        console.log( this.property );
+        
+        // this.setting_inital_values();
+
+        this.setting_inital_value();
+        this.register_checkbox_control(control);
+
+        // this.register_slider_range_control();
+        // this.register_mirrors();
+    }
+
+    register_checkbox_control( control ) {
+        let self = this;
+
+        let checkbox_swtich = jQuery(control).find('.wn_pb_e_checkbox_switch > input');
+        let selected_status;
+
+        jQuery(checkbox_swtich).on( 'click', function(){
+            if( jQuery(this).is(":checked") ) {
+                console.log( 'is checked' );
+                selected_status = self.status[1];
+            }
+            else {
+                console.log( 'not checked' );
+                selected_status = self.status[0];
+            }
+
+            let styles_to_add = [];
+            styles_to_add[self.property] = selected_status;
+
+            console.log('Before Adding the styles');
+
+            let target = {
+                'cube_id': self.cube_id,
+                'subtarget': self.target ,
+            };
+
+            StylesConstructor.instance().add_style(target, styles_to_add );
+            StylesConstructor.instance().render_styles(target);
+    
+        } );
+    }
+
+    setting_inital_value() {
+
+
+
+        let self = this;
+        let cube_properties_and_values = StylesConstructor.instance().get_styles_object(self.cube_id + self.target);
+
+        if( cube_properties_and_values != null ) {
+            if( cube_properties_and_values['desktop'][self.property] == this.status[0] ){
+                jQuery(self.control).find('.wn_pb_e_checkbox_switch > input').attr('checked', false);
+            }
+            else {
+                jQuery(self.control).find('.wn_pb_e_checkbox_switch > input').attr('checked', true);
+            }
+        }
     }
 
 }

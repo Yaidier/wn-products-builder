@@ -336,7 +336,11 @@ class FrontProducts {
             if( !$is_editor && isset($product_data['sections'][$i][$column . '_content'][$w_i]['styles']) ) {
 
                 $widget_styles = $product_data['sections'][$i][$column . '_content'][$w_i]['styles'];
-                echo (stripslashes($widget_styles));
+
+
+                foreach( $widget_styles as $widget_style ) {
+                    echo (stripslashes($widget_style));
+                }
 
             }
 
@@ -391,17 +395,36 @@ class FrontProducts {
     }
 
     public static function render( $product_data, $is_editor = true ) {
-
+        $snap_effect_on_mobile = ($product_data['info']['disable_snap_effect_on_mobile']) ? 'none' : 'y mandatory';
         ?>
-        <style>
-            /** General Styles */
-            @media only screen and (max-width: 600px)  {
-                body .wn_pb_wrapper .wn_pb_container {
-                    scroll-snap-type: <?php echo ($product_data['info']['disable_snap_effect_on_mobile']) ? 'none;' : 'y mandatory;'  ?>
+
+        <?php if ( $snap_effect_on_mobile == 'none' ) : ?>
+            <style>
+                /** General Styles */
+                @media only screen and (max-width: 600px)  {
+                
+                    body .wn_pb_wrapper .wn_pb_container > .wn_pb_section {
+                        height: auto;
+                        padding-left: 20px !important;
+                        padding-right: 20px !important;
+                    }
+
+                    body  .wn_pb_wrapper .wn_pb_section_index {
+                        display: none;
+                    }
+
+                    body .wn_pb_wrapper .wn_pb_container {
+                        scroll-snap-type: <?php echo $snap_effect_on_mobile . ';'; ?>
+                    }
                 }
-            }
-        </style>
-        <div class="wn_pb_wrapper">
+            </style>
+
+        <?php endif; ?>
+
+
+        
+
+        <div class="wn_pb_wrapper" snap-effect-mobile="<?php echo $snap_effect_on_mobile; ?>">
             <div class="wn_pb_sticky_header">
                 <div class="wn_pb_header_content">
                     <div class="wn_pb_logo">
