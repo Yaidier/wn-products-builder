@@ -1220,6 +1220,7 @@ jQuery(document).ready(function($){
 
         if( widget_type == 'form' ) {
 
+            
             data = {};
             const cf7_shortcode = $(element).find('.cf7_shortcode_content').text();
 
@@ -1227,24 +1228,7 @@ jQuery(document).ready(function($){
             data['cube_id'] =  $(element).attr('cube-id');
             data['content'] = cf7_shortcode;
 
-            // data['styles'] = StylesConstructor.instance().get_html_styles(data['cube_id']);
-
-            let all_styles_selectors_for_given_cube_id = StylesConstructor.instance().get_all_cube_styles_id(data['cube_id']);
-            data['styles'] = [];
-
-            console.log('all_styles_selectors_for_given_cube_id');
-            console.log(all_styles_selectors_for_given_cube_id);
-    
-            if( all_styles_selectors_for_given_cube_id != null ) {
-                $.each( all_styles_selectors_for_given_cube_id, function( index, cube_id  ) {
-                    let cube_id_splitted_array = split_the_cube_id( cube_id ),
-                        just_cube_id            = cube_id_splitted_array.cube_id,
-                        just_subtarget          = cube_id_splitted_array.subtarget;
-    
-                    data['styles'].push( StylesConstructor.instance().get_html_styles(just_cube_id, just_subtarget) );
-    
-                } );
-            }
+            data['styles'] = StylesConstructor.instance().get_html_styles(data['cube_id']);
 
             let styles_array = StylesConstructor.instance().get_styles_object(data['cube_id']);
 
