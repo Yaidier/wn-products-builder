@@ -7,7 +7,7 @@ Plugin Name: WN Products Builder
 Plugin URI: https://wirenomads.com
 Description: 
 Author: Yaidier Perez
-Version: 1.0 
+Version: 1.1
 Author URI: 
 License: GPLv2 or later
 */
@@ -37,7 +37,7 @@ require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 // ... Your plugin's main file logic ...
 define( 'WN_PB_DIR', __DIR__ );
 define( 'WN_PB_URL', plugin_dir_url( __FILE__ ) );
-define( 'WN_PB_VERSION', 0.9 );
+define( 'WN_PB_VERSION', 1.1 );
 
 require_once WN_PB_DIR . '/admin/include/products-builder.php';
 require_once WN_PB_DIR . '/admin/include/products-manager.php';
@@ -68,6 +68,77 @@ class WnProductsBuilder {
         add_action( 'wp_enqueue_scripts', array( $this, 'wn_pb_fe_scripts' ) );
 
         $this->setting_backup();
+        $this->version_update_1_1();
+    }
+
+    function insert_new_icon_into_widget_content( $widget_content ) {
+        $ref_img_pos = strpos( $widget_content, '<img' );
+
+        if( $ref_img_pos < 150 ) {
+            $ref_for_insertion_of_icon  = strpos( $widget_content, '>' );
+            $new_icon_element           = '<i class=\"wn_pb_play_video_overlay_icon wn_pb_video_send_to_modal_event\"></i>';
+            $widget_content             = substr_replace( $widget_content, $new_icon_element, $ref_for_insertion_of_icon + 1, 0 );
+        }
+
+        return $widget_content;
+    }
+
+    function iterate_widgets( $widgets_array ) {
+        if( !is_array( $widgets_array ) ) {
+            return $widgets_array;
+        }
+
+        foreach( $widgets_array as &$widget ) {
+            if( isset( $widget['content'] ) && isset( $widget['type'] ) && $widget['type'] === 'simple-video' ) {
+                $widget_content     = $widget['content'];
+                $widget['content']  = $this->insert_new_icon_into_widget_content( $widget_content );
+            }
+        }
+
+        return $widgets_array;
+    }
+
+    function update_video_widget_with_icon( $current_product, $key ) {
+        foreach( $current_product['sections'] as &$section ) {
+            if( isset( $section['media_content'] ) ) {
+                $widgets_array              = $this->iterate_widgets( $section['media_content'] );
+                $section['media_content']   = $widgets_array;
+            }
+
+            if( isset( $section['options_content'] ) ) {
+                $widgets_array              = $this->iterate_widgets( $section['options_content'] );
+                $section['options_content'] = $widgets_array;
+            }
+        }
+        
+        update_option( 'wn_pb_product_' . $key, $current_product );
+    }
+
+    function version_update_1_1() {
+        $general_options    = ProductsBuilder::$general_options;
+        $products           = $general_options['products'];
+        $current_db_version = isset( $general_options['version'] ) ? floatval( $general_options['version'] ) : 1;
+
+        if( $current_db_version >= 1.1 ) {
+            return;
+        }
+
+        foreach( $products as $key => $value ) {
+            $current_product = get_option( 'wn_pb_product_' . $key );
+
+            if( $current_product === false || !isset( $current_product['sections'] ) ) {
+                continue;
+            }
+
+            $this->update_video_widget_with_icon( $current_product, $key );
+
+        }
+
+        $general_options['version'] = WN_PB_VERSION;
+
+        update_option( 'wn_pb_options', $general_options );
+        ProductsBuilder::$general_options = $general_options;
+
     }
 
     function setting_backup() {

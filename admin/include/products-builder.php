@@ -10,6 +10,8 @@ class ProductsBuilder {
 
     public static function register() {
 
+        
+
         if ( false === get_option( 'wn_pb_options' ) ) {
 
             self::$general_options = [ 
@@ -24,6 +26,8 @@ class ProductsBuilder {
         else {
     
             self::$general_options = get_option( 'wn_pb_options' );
+
+            update_option( 'wn_pb_options', self::$general_options );
     
         }
 

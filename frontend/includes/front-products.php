@@ -337,9 +337,13 @@ class FrontProducts {
 
                 $widget_styles = $product_data['sections'][$i][$column . '_content'][$w_i]['styles'];
 
-
-                foreach( $widget_styles as $widget_style ) {
-                    echo (stripslashes($widget_style));
+                if( is_array( $widget_styles ) ) {
+                    foreach( $widget_styles as $widget_style ) {
+                        echo (stripslashes($widget_style));
+                    }
+                }
+                else {
+                    echo (stripslashes($widget_styles));
                 }
 
             }
@@ -424,7 +428,7 @@ class FrontProducts {
 
         
 
-        <div class="wn_pb_wrapper" snap-effect-mobile="<?php echo $snap_effect_on_mobile; ?>">
+        <div class="wn_pb_wrapper" version="<?php echo WN_PB_VERSION; ?>" snap-effect-mobile="<?php echo $snap_effect_on_mobile; ?>">
             <div class="wn_pb_sticky_header">
                 <div class="wn_pb_header_content">
                     <div class="wn_pb_logo">

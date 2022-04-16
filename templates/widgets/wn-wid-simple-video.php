@@ -25,6 +25,19 @@ class WnSimpleVideoImgWidget extends WnWidgets {
                     ]
                 ]
             ],
+            'simple_video_hide_label_img' => [
+                'type'   => 'checkbox',
+                'label'  => 'Hide Label Image',
+                'target' => [
+                    'selectors' => '.wn_pb_video_img_preview',
+                    'property'  => 'display',
+                    'status' => [
+                        '0' => 'block',
+                        '1' => 'none',
+                    ],
+                    'default' => false,
+                ]
+            ],
             'simple_video_hide_label' => [
                 'type'   => 'checkbox',
                 'label'  => 'Hide Label',
@@ -48,7 +61,20 @@ class WnSimpleVideoImgWidget extends WnWidgets {
                         '0' => 'block',
                         '1' => 'none',
                     ],
-                    'default' => false,
+                    'default' => true,
+                ]
+            ],
+            'simple_video_background_color_icon' => [
+                'type'   => 'checkbox',
+                'label'  => 'Set Background Red',
+                'target' => [
+                    'selectors' => '.wn_pb_send_trigger_text',
+                    'property'  => 'background-color',
+                    'status' => [
+                        '0' => 'red',
+                        '1' => 'transparent',
+                    ],
+                    'default' => true,
                 ]
             ],
         ];
@@ -67,7 +93,7 @@ class WnSimpleVideoImgWidget extends WnWidgets {
             <div class="wn_pb_e_widget_content">
                 <div class="wn_pb_video_content" widget-id="" widget-type="simple-video">
                     <i class="wn_pb_play_video_overlay_icon wn_pb_video_send_to_modal_event"></i>
-                    <img class="wn_pb_video_img_preview" src="" default-preview-img="<?php echo WN_PB_URL . 'editor/assets/img/default-img.svg' ?>" alt="">
+                    <img class="wn_pb_video_img_preview" src="<?php echo WN_PB_URL . 'editor/assets/img/default-img.svg' ?>" default-preview-img="<?php echo WN_PB_URL . 'editor/assets/img/default-img.svg' ?>" alt="">
 
                     <div class="wn_pb_send_to_modal_wrapper wn_pb_send_to_modal_video_media">
                         <div id="modal_trigger" class="wn_pb_send_trigger">

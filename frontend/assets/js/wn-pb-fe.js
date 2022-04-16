@@ -15,6 +15,7 @@ class WnPbFrontEnd {
         let self = this;
         this.$ = $;
 
+        this.version = $('.wn_pb_wrapper').attr('version');
         this.active_section = 0;
         this.number_of_sections = 0;
         this.number_of_editable_sections = 0;
@@ -35,6 +36,8 @@ class WnPbFrontEnd {
 
         console.log( 'already_on_desktop_view' );
         console.log( this.already_on_desktop_view );
+
+        // this.update_version_1_changes();
 
         //Initializing the script
         self.appHeight();
@@ -619,8 +622,10 @@ class WnPbFrontEnd {
 
     static register_modal_trigger_event() {
 
-        let $ = this.$;
-        let self = this;
+        let $ = this.$,
+            self = this,
+            content_to_send,
+            is_video_content;
 
         $('.wn_pb_send_trigger, .wn_pb_video_send_to_modal_event').on('click', function(){
 
@@ -628,13 +633,21 @@ class WnPbFrontEnd {
                 return;
             }
 
+            console.log('attempt to send to modal');
+
             // Get the modal
             let modal = document.getElementById("myModal");
 
             //Getting the modal content
             let modal_body = $('.modal-body');
-            // const content_to_send = $(this).parent().children('.wn_pb_modal_content_to_send').html();
-            const content_to_send = $(this).closest('.wn_pb_video_content').find('.wn_pb_modal_content_to_send').html();
+            if( $(this).closest('.wn_pb_video_content').length ) {
+                content_to_send = $(this).closest('.wn_pb_video_content').find('.wn_pb_modal_content_to_send').html();
+                is_video_content = true;
+            }
+            else {
+                content_to_send = $(this).closest('.wn_pb_send_to_modal_wrapper').find('.wn_pb_modal_content_to_send').html();
+                is_video_content = false;
+            }
 
             //Cleaning the modal content
             $(modal_body).empty();
@@ -642,15 +655,8 @@ class WnPbFrontEnd {
             //Updating the modal content with the new content
             $(modal_body).append(content_to_send);
 
-            let is_video_content;
-            let video_element = $('.modal .wn_pb_modal_content').find('video');
-            let video_youtube_element = $('.modal .wn_pb_modal_content').find('.wn_pb_video_element_iframe');
-            if( $(video_element).length ) {
-                is_video_content = true;
-            }
-            else {
-                is_video_content = false;
-            }
+            let video_element           = $('.modal .wn_pb_modal_content').find('video');
+            let video_youtube_element   = $('.modal .wn_pb_modal_content').find('.wn_pb_video_element_iframe');
 
             //Opening the modal window
             modal.style.display = "block";
